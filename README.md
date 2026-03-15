@@ -71,81 +71,153 @@ Method: manual
 Status: up
 
 Configure Unused Interfaces
+
 interface range g0/1 - 2
+
 description ## not in use ##
+
 Verify and Save Configuration
+
 do show running-config
+
 end
+
 copy running-config startup-config
+
 show startup-config
+
 Part 2 — Configure PCs
+
 PC1
 
 Open PC1 → Config → FastEthernet0
 
 IP Address: 172.16.0.1
+
 Subnet Mask: 255.255.0.0
+
 Default Gateway: 172.16.255.254
+
 PC2
+
 IP Address: 172.16.0.2
+
 Subnet Mask: 255.255.0.0
+
 PC3
+
 IP Address: 172.16.0.3
+
 Subnet Mask: 255.255.0.0
+
 PC4
+
 IP Address: 172.16.0.4
+
 Subnet Mask: 255.255.0.0
+
 Part 3 — Configure SW1
+
 Set Hostname
+
 enable
+
 conf t
+
 hostname SW1
+
 Check Interfaces
+
 do show interfaces status
+
 Configure Uplink Interfaces
+
 G0/1 (Connected to R1)
+
 interface g0/1
+
 speed 1000
+
 duplex full
+
 description ## to R1 ##
+
 G0/2 (Connected to SW2)
+
 interface g0/2
+
 speed 1000
+
 duplex full
+
 description ## to SW2 ##
+
 Configure End-Host Ports
+
 interface range f0/1 - 2
+
 description ## to end hosts ##
+
 Disable Unused Ports
+
 interface range f0/3 - 24
+
 description ## not in use ##
+
 shutdown
+
 Verify and Save
+
 do show interfaces status
+
 end
+
 write memory
+
 show startup-config
+
 Part 4 — Configure SW2
+
 Set Hostname
+
 enable
+
 conf t
+
 hostname SW2
+
 Check Interfaces
+
 do show interfaces status
+
 Configure Uplink Interface
+
 interface g0/1
+
 speed 1000
+
 duplex full
+
 description ## to SW1 ##
+
 Configure End-Host Ports
+
 interface range f0/1 - 2
+
 description ## to end hosts ##
+
 Disable Unused Ports
+
 interface range g0/2, f0/3 - 24
+
 description ## not in use ##
+
 shutdown
+
 Verify and Save
+
 do show interfaces status
+
 end
 
 write
