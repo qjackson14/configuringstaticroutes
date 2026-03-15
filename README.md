@@ -147,8 +147,11 @@ shutdown
 Verify and Save
 do show interfaces status
 end
+
 write
+
 show startup-config
+
 Lab Complete
 
 ✔ Router interface configured
@@ -158,4 +161,3 @@ Lab Complete
 ✔ PCs assigned IP addresses
 ✔ Configurations saved on all devices
 
-✅ If you want, I can also help you turn this into a very professional GitHub lab repo like network engineers use (with sections like Topology, Diagram, Commands, Verification, and Troubleshooting).
