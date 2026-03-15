@@ -21,263 +21,141 @@
 
 <h2>Step-by-Step</h2>
 
-<br>✅ Cisco Router and Switch Interface Configuration Lab</br>
+Part 1 — Configure R1
+Set Hostname
 
-- Network: 172.16.0.0/16
+Access R1 CLI
 
-<br>🟢 Part 1 — Configure R1</br>
-🔹 Set Hostname
+Enter privileged EXEC mode
 
-- Access R1 CLI.
+enable
 
-- Enter privileged EXEC mode: enable
+Enter global configuration mode
 
-- Enter global configuration mode: configure terminal
+configure terminal
 
-- Set hostname: hostname R1
+Set hostname
 
-  -🔹 Check Interface Status
+hostname R1
+Check Interface Status
 
-- Enter interface configuration mode: interface g0/0
+Enter interface configuration mode
 
-- Check interface information: do show ip interface brief
+interface g0/0
 
-- Confirm:
+Verify interface status
 
-- IP address is unassigned
+do show ip interface brief
 
-- Method is unset
+Expected:
 
-- Status is administratively down
+IP address: unassigned
 
--🔹 Configure Interface G0/0
+Method: unset
 
-- Assign IP address:
-- ip address 172.16.255.254 255.255.0.0
+Status: administratively down
 
-- Set interface speed: speed 1000
-
-- Set duplex mode: duplex full
-
-- Add description: description ## to SW1 ##
-
-- Enable interface: no shutdown
-
-- 🔹 Verify Interface
-
-- Check interface status:
-- do show ip interface brief
-
-- Confirm:
-
-- IP address is configured
-
-- Method shows manual
-
-- Status shows up
-
-- 🔹 Configure Unused Interfaces
-
-- Enter interface range:
-- interface range g0/1 - 2
-
-- Add description:
-- description ## not in use ##
-
-- 🔹 Verify Configuration
-
-- View running configuration:
-= do show running-config
-
--🔹 Save Configuration
-
-- Exit configuration mode: end
-
-- Save configuration:
-- copy running-config startup-config
-
-- Verify saved configuration:
-- show startup-config
-
-- 🟢 Part 2 — Configure PCs
--🔹 PC1
-
-- Click PC1 → Config → FastEthernet0
-
-- Set IP address: 172.16.0.1
-
-- Confirm subnet mask: 255.255.0.0
-
-- Confirm default gateway: 172.16.255.254
-
--🔹 PC2
-
-- Click PC2 → Config → FastEthernet0
-
-- Set IP address: 172.16.0.2
-
-- Confirm subnet mask: 255.255.0.0
-
--🔹 PC3
-
-- Click PC3 → Config → FastEthernet0
-
-- Set IP address: 172.16.0.3
-
-- Confirm subnet mask: 255.255.0.0
-
-- 🔹 PC4
-
-- Click PC4 → Config → FastEthernet0
-
-Set IP address: 172.16.0.4
-
-Confirm subnet mask: 255.255.0.0
-
-🟢 Part 3 — Configure SW1
-🔹 Set Hostname
-
-Access SW1 CLI
-
-Enter privileged mode: enable
-
-Enter configuration mode: conf t
-
-Set hostname: hostname SW1
-
-🔹 Check Interface Status
-
-Enter command:
-do show interfaces status
-
-🔹 Configure G0/1 (Connected to R1)
-
-Enter interface mode:
-interface g0/1
-
-Set speed: speed 1000
-
-Set duplex: duplex full
-
-Add description:
-description ## to R1 ##
-
-🔹 Configure G0/2 (Connected to SW2)
-
-Enter interface mode:
-interface g0/2
-
-Set speed: speed 1000
-
-Set duplex: duplex full
-
-Add description:
-description ## to SW2 ##
-
-🔹 Configure End-Host Ports
-
-Enter interface range:
-interface range f0/1 - 2
-
-Add description:
-description ## to end hosts ##
-
-🔹 Disable Unused Ports
-
-Enter interface range:
-interface range f0/3 - 24
-
-Add description:
-description ## not in use ##
-
-Disable interfaces:
-shutdown
-
-🔹 Verify and Save
-
-Verify interface configuration:
-do show interfaces status
-
-Exit configuration mode: end
-
-Save configuration:
-write memory
-
-Verify saved configuration:
-show startup-config
-
-🟢 Part 4 — Configure SW2
-🔹 Set Hostname
-
-Access SW2 CLI
-
-Enter privileged mode: enable
-
-Enter configuration mode: conf t
-
-Set hostname: hostname SW2
-
-🔹 Check Interface Status
-
-Run command:
-do show interfaces status
-
-🔹 Configure Uplink Interface
-
-Enter interface mode:
-interface g0/1
-
-Set speed: speed 1000
-
-Set duplex: duplex full
-
-Add description:
+Configure Interface G0/0
+ip address 172.16.255.254 255.255.0.0
+speed 1000
+duplex full
 description ## to SW1 ##
+no shutdown
+Verify Interface
+do show ip interface brief
 
-🔹 Configure End-Host Ports
+Expected:
 
-Enter interface range:
-interface range f0/1 - 2
+Method: manual
 
-Add description:
-description ## to end hosts ##
+Status: up
 
-🔹 Disable Unused Ports
-
-Enter interface range:
-interface range g0/2, f0/3 - 24
-
-Add description:
+Configure Unused Interfaces
+interface range g0/1 - 2
 description ## not in use ##
-
-Disable interfaces:
-shutdown
-
-🔹 Verify and Save
-
-Verify interfaces:
-do show interfaces status
-
-Exit configuration mode: end
-
-Save configuration:
-write
-
-Verify configuration:
+Verify and Save Configuration
+do show running-config
+end
+copy running-config startup-config
 show startup-config
+Part 2 — Configure PCs
+PC1
 
-✅ Lab Complete
+Open PC1 → Config → FastEthernet0
 
-Hostnames configured on router and switches
+IP Address: 172.16.0.1
+Subnet Mask: 255.255.0.0
+Default Gateway: 172.16.255.254
+PC2
+IP Address: 172.16.0.2
+Subnet Mask: 255.255.0.0
+PC3
+IP Address: 172.16.0.3
+Subnet Mask: 255.255.0.0
+PC4
+IP Address: 172.16.0.4
+Subnet Mask: 255.255.0.0
+Part 3 — Configure SW1
+Set Hostname
+enable
+conf t
+hostname SW1
+Check Interfaces
+do show interfaces status
+Configure Uplink Interfaces
+G0/1 (Connected to R1)
+interface g0/1
+speed 1000
+duplex full
+description ## to R1 ##
+G0/2 (Connected to SW2)
+interface g0/2
+speed 1000
+duplex full
+description ## to SW2 ##
+Configure End-Host Ports
+interface range f0/1 - 2
+description ## to end hosts ##
+Disable Unused Ports
+interface range f0/3 - 24
+description ## not in use ##
+shutdown
+Verify and Save
+do show interfaces status
+end
+write memory
+show startup-config
+Part 4 — Configure SW2
+Set Hostname
+enable
+conf t
+hostname SW2
+Check Interfaces
+do show interfaces status
+Configure Uplink Interface
+interface g0/1
+speed 1000
+duplex full
+description ## to SW1 ##
+Configure End-Host Ports
+interface range f0/1 - 2
+description ## to end hosts ##
+Disable Unused Ports
+interface range g0/2, f0/3 - 24
+description ## not in use ##
+shutdown
+Verify and Save
+do show interfaces status
+end
+write
+show startup-config
+Lab Complete
 
-Router interface configured with IP address
+✔ Router interface configured
+✔ Switch uplinks configured
+✔ End-host ports labeled
+✔ Unused ports disabled
+✔ PCs assigned IP addresses
+✔ Configurations saved on all devices
 
-Speed and duplex configured on uplinks
-
-Interface descriptions added
-
-Unused interfaces disabled
-
-PCs assigned IP addresses
-
-Configurations saved on all devices
+✅ If you want, I can also help you turn this into a very professional GitHub lab repo like network engineers use (with sections like Topology, Diagram, Commands, Verification, and Troubleshooting).
