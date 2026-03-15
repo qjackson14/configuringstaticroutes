@@ -21,215 +21,298 @@
 
 <h2>Step-by-Step</h2>
 
-Part 1 — Configure R1
-Set Hostname
+✅ Static Routing – CCNA Notes
 
-Access R1 CLI
+🟢 Part 1 — Connected and Local Routes
 
-Enter privileged EXEC mode
+🔹 What Are Connected and Local Routes
 
-enable
+Connected routes are automatically added when an IP address is configured on a router interface.
 
-Enter global configuration mode
+Local routes provide a route to the router’s own IP address.
 
-configure terminal
+Connected routes provide a route to the network connected to the interface.
 
-Set hostname
+These routes appear in the routing table automatically.
 
-hostname R1
-Check Interface Status
+🔹 Routes Per Interface
 
-Enter interface configuration mode
+Each router interface creates two routes.
 
-interface g0/0
+One connected route for the network.
 
-Verify interface status
+One local route for the interface IP address.
 
-do show ip interface brief
+Example:
 
-Expected:
+If a router has 2 interfaces configured:
 
-IP address: unassigned
+2 connected routes
 
-Method: unset
+2 local routes
 
-Status: administratively down
+Total = 4 routes
 
-Configure Interface G0/0
-ip address 172.16.255.254 255.255.0.0
-speed 1000
-duplex full
-description ## to SW1 ##
-no shutdown
-Verify Interface
-do show ip interface brief
+If a router has 3 interfaces configured:
 
-Expected:
+3 connected routes
 
-Method: manual
+3 local routes
 
-Status: up
+Total = 6 routes
 
-Configure Unused Interfaces
+🔹 Router Knowledge with Default Routes
 
-interface range g0/1 - 2
+Routers automatically know how to reach:
 
-description ## not in use ##
+Their own IP addresses
 
-Verify and Save Configuration
+Networks directly connected to their interfaces
 
-do show running-config
+Routers do not know how to reach remote networks unless additional routes are configured.
 
-end
+If a router receives a packet for an unknown network:
 
-copy running-config startup-config
+The router drops the packet.
 
-show startup-config
+🟢 Part 2 — Default Gateway
 
-Part 2 — Configure PCs
+🔹 End Host Communication
 
-PC1
+End hosts such as PCs can communicate directly with devices in their local network.
 
-Open PC1 → Config → FastEthernet0
+Example:
 
-IP Address: 172.16.0.1
+PC1 network:
 
-Subnet Mask: 255.255.0.0
+192.168.1.0/24
 
-Default Gateway: 172.16.255.254
+PC4 network:
 
-PC2
+192.168.4.0/24
 
-IP Address: 172.16.0.2
+Devices in the same network communicate directly.
 
-Subnet Mask: 255.255.0.0
+🔹 Sending Traffic Outside the Network
 
-PC3
+To reach networks outside the local network:
 
-IP Address: 172.16.0.3
+Hosts send packets to their default gateway.
 
-Subnet Mask: 255.255.0.0
+A default gateway is simply the router connected to the local network.
 
-PC4
+Example:
 
-IP Address: 172.16.0.4
+PC1 configuration:
 
-Subnet Mask: 255.255.0.0
+IP Address
 
-Part 3 — Configure SW1
+192.168.1.10
 
-Set Hostname
+Default Gateway
 
-enable
+192.168.1.1
 
-conf t
+PC1 sends packets destined for other networks to R1.
 
-hostname SW1
+🟢 Part 3 — Default Route
 
-Check Interfaces
+🔹 Default Route Concept
 
-do show interfaces status
+A default route is written as:
 
-Configure Uplink Interfaces
+0.0.0.0/0
 
-G0/1 (Connected to R1)
+This route matches all IP addresses.
 
-interface g0/1
+It is considered the least specific route.
 
-speed 1000
+🔹 How Default Routes Work
 
-duplex full
+A router uses the default route when:
 
-description ## to R1 ##
+No more specific route exists in the routing table.
 
-G0/2 (Connected to SW2)
+Default routes are commonly used to send traffic toward:
 
-interface g0/2
+The Internet
 
-speed 1000
+Another upstream router.
 
-duplex full
+🟢 Part 4 — Packet Flow Example (PC1 → PC4)
 
-description ## to SW2 ##
+🔹 Layer 3 (IP Layer)
 
-Configure End-Host Ports
+Source IP:
 
-interface range f0/1 - 2
+192.168.1.10
 
-description ## to end hosts ##
+Destination IP:
 
-Disable Unused Ports
+192.168.4.10
 
-interface range f0/3 - 24
+These do not change during the packet's journey.
 
-description ## not in use ##
+🔹 Layer 2 (Ethernet Frame)
 
-shutdown
+When PC1 sends the packet:
 
-Verify and Save
+Destination MAC = Default Gateway MAC (R1)
 
-do show interfaces status
+PC1 first learns R1’s MAC address using ARP.
 
-end
+🔹 Packet Processing at Routers
 
-write memory
+When R1 receives the packet:
 
-show startup-config
+The router removes the Layer 2 frame.
 
-Part 4 — Configure SW2
+The router checks its routing table.
 
-Set Hostname
+If no matching route exists, the router drops the packet.
 
-enable
+🟢 Part 5 — Static Routes
 
-conf t
+🔹 What Is a Static Route
 
-hostname SW2
+Static routes are manually configured routes.
 
-Check Interfaces
+They tell the router where to forward packets for specific networks.
 
-do show interfaces status
+🔹 Static Route Command Format
 
-Configure Uplink Interface
+ip route [destination network] [subnet mask] [next hop]
 
-interface g0/1
+Example:
 
-speed 1000
+ip route 192.168.4.0 255.255.255.0 192.168.13.3
 
-duplex full
+Meaning:
 
-description ## to SW1 ##
+To reach network 192.168.4.0/24
 
-Configure End-Host Ports
+Forward packets to 192.168.13.3
 
-interface range f0/1 - 2
+🟢 Part 6 — Static Routes Required for Communication
 
-description ## to end hosts ##
+To allow PC1 and PC4 to communicate, routers must know how to reach both networks:
 
-Disable Unused Ports
+192.168.1.0/24
 
-interface range g0/2, f0/3 - 24
+192.168.4.0/24
 
-description ## not in use ##
+This ensures two-way reachability.
 
-shutdown
+Without two-way routes:
 
-Verify and Save
+PC1 might reach PC4
 
-do show interfaces status
+But PC4 cannot send replies back.
 
-end
+🟢 Part 7 — Static Route Configuration
 
-write
+🔹 R1 Configuration
 
-show startup-config
+ip route 192.168.4.0 255.255.255.0 192.168.13.3
 
-Lab Complete
+This tells R1:
 
-✔ Router interface configured
-✔ Switch uplinks configured
-✔ End-host ports labeled
-✔ Unused ports disabled
-✔ PCs assigned IP addresses
-✔ Configurations saved on all devices
+Send traffic for 192.168.4.0/24 to R3.
 
+🔹 R3 Configuration
+
+Route to PC1 network:
+
+ip route 192.168.1.0 255.255.255.0 192.168.13.1
+
+Route to PC4 network:
+
+ip route 192.168.4.0 255.255.255.0 192.168.34.4
+
+🔹 R4 Configuration
+
+ip route 192.168.1.0 255.255.255.0 192.168.34.3
+
+🟢 Part 8 — Testing Connectivity
+
+Use the ping command from PC1.
+
+Example result:
+
+5 packets transmitted
+
+5 packets received
+
+0% packet loss
+
+This confirms:
+
+PC1 can reach PC4
+
+PC4 can send replies to PC1
+
+Two-way communication is successful.
+
+🟢 Part 9 — Packet Travel Through the Network
+
+Packet path:
+
+PC1 → R1 → R3 → R4 → PC4
+
+At each router:
+
+The frame is de-encapsulated
+
+The routing table is checked
+
+The packet is re-encapsulated
+
+🔹 Important Rule
+
+The IP addresses remain the same throughout the journey.
+
+The MAC addresses change at every hop.
+
+🟢 Part 10 — Static Route Using Exit Interface
+
+Instead of specifying a next hop, you can specify the exit interface.
+
+Example:
+
+ip route 192.168.1.0 255.255.255.0 g0/0
+
+This tells the router:
+
+Send packets to 192.168.1.0/24 out G0/0.
+
+🟢 Part 11 — Static Route Using Interface and Next Hop
+
+You can specify both.
+
+Example:
+
+ip route 192.168.4.0 255.255.255.0 g0/1 192.168.24.4
+
+🟢 Part 12 — Default Route Configuration
+
+Command:
+
+ip route 0.0.0.0 0.0.0.0 [next hop]
+
+Example:
+
+ip route 0.0.0.0 0.0.0.0 203.0.113.2
+
+Meaning:
+
+Send all unknown traffic to 203.0.113.2.
+
+🟢 Routing Table Codes
+
+C = Connected route
+
+L = Local route
+
+S = Static route
+
+S* = Candidate default route
